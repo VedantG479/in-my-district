@@ -11,13 +11,41 @@ import {
     Eye,
     EyeOff,
 } from "lucide-react";
+import auth from "../appwrite/auth";
+import { useDispatch } from "react-redux";
+import { loginStore } from "../store/authSlice";
+import usersDB from "../appwrite/usersDB";
 
 export default function HomePage() {
     const {register, handleSubmit} = useForm()
-    const [mode, setMode] = useState("login");
-    const [showPassword, setShowPassword] = useState(false);
+    const [mode, setMode] = useState("login")
+    const [showPassword, setShowPassword] = useState(false)
+    const dispatch = useDispatch()
 
-    const submitHandler = (data) => console.log(data)
+    const submitHandler = async(data) => {
+        const {username, phone, email, password} = data
+        if(mode == 'signup'){
+            try{
+                await auth.createUser(username, email, password)
+                const createdUser = await auth.getCurrentUser()
+                await usersDB.addUser(createdUser.$id, username, email, phone)
+                dispatch(loginStore(createdUser.$id))
+            }   
+            catch(error){
+                console.log('error creating user: ', error)
+            }
+        }
+        else{
+            try{    
+                await auth.loginUser(email, password)
+                const loggedInUser = await auth.getCurrentUser()
+                dispatch(loginStore(loggedInUser.$id))
+            }
+            catch(error){
+                console.log('error logging in user: ', error)
+            }
+        }
+    }
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-[#0B0D11] font-[Inter]">
