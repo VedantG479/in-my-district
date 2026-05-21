@@ -2,15 +2,7 @@ import { useState } from "react";
 import background from "../assets/background.png";
 import logo from '../assets/logo.png'
 import { useForm } from "react-hook-form";
-import {
-    ArrowRight,
-    Mail,
-    Lock,
-    User,
-    Phone,
-    Eye,
-    EyeOff,
-} from "lucide-react";
+import { ArrowRight, Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
 import auth from "../appwrite/auth";
 import { useDispatch } from "react-redux";
 import { loginStore } from "../store/authSlice";
@@ -135,6 +127,7 @@ export default function LandingPage() {
                                 />
 
                                 <button
+                                    type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                     className="text-white/40">
                                     {showPassword ? (

@@ -18,7 +18,7 @@ class Users{
             {
                 username, 
                 email, 
-                phone, 
+                phone: Number(phone), 
                 "followers": [], 
                 "following": [] 
             }

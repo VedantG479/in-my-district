@@ -6,12 +6,12 @@ import { useState } from "react";
 import Dropdown from "../components/Dropdown";
 import SearchAi from "../components/SearchAi";
 import Feed from "../components/Feed";
+import NotAuthenticatedPage from "./NotAuthenticatedPage";
 
 export default function HomePage() {
     const { isAuthenticated, userId } = useSelector(state => state.auth)
-    console.log(userId)
 
-    return (
+    return isAuthenticated ? (
         <div className="relative h-screen overflow-hidden bg-[#0B0D11] font-[Inter]">
             <div className="absolute inset-0 bg-[#0F1115]">
                 <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:28px_28px]" />
@@ -51,7 +51,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* StoryPost */}
+            <StoryPost/>
 
             <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4">
                 <button className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur-2xl">
@@ -60,5 +60,5 @@ export default function HomePage() {
                 <SearchAi/>
             </div>
         </div>
-    );
+    ) : <NotAuthenticatedPage/>
 }
