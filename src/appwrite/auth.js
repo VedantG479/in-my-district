@@ -18,7 +18,7 @@ class AuthService{
                 password, 
                 name
             )
-            if(user)    this.loginUser(email, password) 
+            if(user)    await this.loginUser(email, password) 
         }
         catch(error){
             throw error
