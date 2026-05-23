@@ -1,11 +1,7 @@
-import {
-  Heart,
-  Bookmark,
-  Pause,
-  X,
-} from "lucide-react";
+import { Heart, Bookmark, Pause, X } from "lucide-react";
+import profile from '../assets/profile.png'
 
-export default function StoryPost() {
+export default function Story({setUser}) {
   return (
     <div className="absolute left-14 top-[145px] z-20 h-[660px] w-[330px] overflow-hidden rounded-[24px] border border-white/10 bg-black shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
       <img
@@ -25,7 +21,7 @@ export default function StoryPost() {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2.5">
             <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400"
+              src={profile}
               alt=""
               className="h-9 w-9 rounded-full border border-white/20 object-cover"/>
 
@@ -49,7 +45,7 @@ export default function StoryPost() {
               <Pause size={16} className="text-white/80"/>
             </button>
 
-            <button>
+            <button onClick={() => setUser(null)}>
               <X size={18} className="text-white/80" />
             </button>
           </div>

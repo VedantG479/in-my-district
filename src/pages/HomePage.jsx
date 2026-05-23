@@ -1,15 +1,34 @@
 import { Search, Plus, LocateFixed} from "lucide-react";
 import logo from '../assets/logo.png'
-import StoryPost from "../components/StoryPost";
+import Story from "../components/Story";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "../components/Dropdown";
 import SearchAi from "../components/SearchAi";
 import Feed from "../components/Feed";
 import NotAuthenticatedPage from "./NotAuthenticatedPage";
+import usersDB from "../appwrite/usersDB";
 
 export default function HomePage() {
-    const { isAuthenticated, userId } = useSelector(state => state.auth)
+    const { isAuthenticated, userData } = useSelector(state => state.auth)
+    const authenticatedUser = JSON.parse(userData)
+
+    const [ activeUsers, setActiveUsers ] = useState([])
+    const [ user, setUser] = useState(null)
+
+    useEffect(() => {
+        if(!isAuthenticated)    return
+        async function fetchUsers(){
+            const followingList = authenticatedUser.following
+            let users = []
+            for(const followingUser of followingList){
+                const tempUser = await usersDB.getUser(followingUser)
+                if(tempUser.activePost)   users.push(tempUser)
+            }
+            setActiveUsers(users)
+        }
+        fetchUsers()
+    }, [])
 
     return isAuthenticated ? (
         <div className="relative h-screen overflow-hidden bg-[#0B0D11] font-[Inter]">
@@ -39,7 +58,7 @@ export default function HomePage() {
                                 Your story
                             </p>
                         </div>
-                        <Feed activePosts={[]}/>
+                        <Feed activeUsers={activeUsers} setUser={setUser}/>
                     </div>
                 </div>
 
@@ -51,7 +70,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <StoryPost/>
+            {user && <Story setUser={setUser}/>}
 
             <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4">
                 <button className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur-2xl">

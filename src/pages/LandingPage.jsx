@@ -23,7 +23,8 @@ export default function LandingPage() {
                 await auth.createUser(username, email, password)
                 const createdUser = await auth.getCurrentUser()
                 await usersDB.addUser(createdUser.$id, username, email, phone)
-                dispatch(loginStore(createdUser.$id))
+                const createdUserData = await usersDB.getUser(createdUser.$id)
+                dispatch(loginStore(JSON.stringify(createdUserData)))
                 navigate('/home')
             }   
             catch(error){
@@ -34,7 +35,8 @@ export default function LandingPage() {
             try{    
                 await auth.loginUser(email, password)
                 const loggedInUser = await auth.getCurrentUser()
-                dispatch(loginStore(loggedInUser.$id))
+                const loggedInUserData = await usersDB.getUser(loggedInUser.$id)
+                dispatch(loginStore(JSON.stringify(loggedInUserData)))
                 navigate('/home')
             }
             catch(error){
@@ -115,7 +117,6 @@ export default function LandingPage() {
                                     className="w-full bg-transparent text-[14px] font-medium tracking-[-0.02em] text-white outline-none placeholder:text-white/35"
                                 />
                             </div>
-                    
                             <div className="flex h-12 items-center gap-3 rounded-[16px] border border-white/10 bg-white/[0.04] px-4">
                                 <Lock size={16} className="text-white/40" />
                                 <input
@@ -137,7 +138,6 @@ export default function LandingPage() {
                                     )}
                                 </button>
                             </div>
-
                             <button
                                 type="submit"
                                 className="group flex h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[#D9916B] text-[14px] font-medium tracking-[-0.02em] text-white transition-all duration-300 hover:bg-[#E0A27F]">
